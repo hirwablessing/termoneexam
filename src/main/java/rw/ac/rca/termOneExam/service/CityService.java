@@ -20,7 +20,7 @@ public class CityService {
 		Optional<City> found = cityRepository.findById(id);
 		if(found.isPresent()) {
 			City city = found.get();
-			city.setFahrenheit(convertCelsiusToFahrenheit(city.getWeather()));
+			city.setFahrenheit(convertCelsiusIntoFahrenheit(city.getWeather()));
 			return city;
 		}
 
@@ -31,13 +31,13 @@ public class CityService {
 		List<City> cities = cityRepository.findAll();
 
 		for(City city:cities) {
-			city.setFahrenheit(convertCelsiusToFahrenheit(city.getWeather()));
+			city.setFahrenheit(convertCelsiusIntoFahrenheit(city.getWeather()));
 		}
 
 		return cities;
 	}
 
-	private Double convertCelsiusToFahrenheit(double degrees){
+	private Double convertCelsiusIntoFahrenheit(double degrees){
 		return ((degrees * 9)/5) + 32;
 	}
 

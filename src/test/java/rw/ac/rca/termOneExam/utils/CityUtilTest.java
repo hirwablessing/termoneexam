@@ -56,7 +56,7 @@ public class CityUtilTest {
     @Test
     public void testMocking() {
         List<City> mockedList = Mockito.mock(ArrayList.class);
-        City city = new City("Musanze", 24);
+        City city = new City("Musanze", 18);
         mockedList.add(city);
         Mockito.verify(mockedList).add(city);
 
@@ -66,7 +66,7 @@ public class CityUtilTest {
     @Test
     public void testSpying() {
         List<City> spyList = Mockito.spy(ArrayList.class);
-        City city = new City("Musanze", 24);
+        City city = new City("Musanze", 18);
         spyList.add(city);
         Mockito.verify(spyList).add(city);
 

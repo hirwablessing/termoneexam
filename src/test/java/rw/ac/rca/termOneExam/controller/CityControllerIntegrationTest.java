@@ -21,54 +21,54 @@ public class CityControllerIntegrationTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private String apiPath = "/api/cities";
+    private String baseUrl = "/api/cities";
 
     @Test
     public void getAll_success() throws JSONException {
-        String response = this.restTemplate.getForObject(apiPath+"/all",String.class);
+        String res = this.restTemplate.getForObject(baseUrl+"/all",String.class);
 
-        JSONAssert.assertEquals("[{id:101},{id:102},{id:103},{id:104}]",response,false);
+        JSONAssert.assertEquals("[{id:101},{id:102},{id:103},{id:104}]",res,false);
 
     }
 
     @Test
     public void getById_success() throws JSONException {
-        ResponseEntity<City> city = this.restTemplate.getForEntity(apiPath+"/id/101",City.class);
+        ResponseEntity<City> myCity = this.restTemplate.getForEntity(baseUrl+"/id/101",City.class);
 
-        assertTrue(city.getStatusCode().is2xxSuccessful());
-        assertEquals("Kigali",city.getBody().getName());
-        assertEquals(24,city.getBody().getWeather());
-
-    }
-
-    @Test
-    public void getById_404() throws JSONException {
-        ResponseEntity<APIResponse> response = this.restTemplate.getForEntity(apiPath+"/id/600",APIResponse.class);
-
-        assertTrue(response.getStatusCodeValue()==404);
-        assertFalse(response.getBody().isStatus());
-        assertEquals("City not found with id 600",response.getBody().getMessage());
+        assertTrue(myCity.getStatusCode().is2xxSuccessful());
+        assertEquals("Kigali",myCity.getBody().getName());
+        assertEquals(24,myCity.getBody().getWeather());
 
     }
 
     @Test
-    public void postCity_success() throws JSONException {
-        City body = new City(105,"Cairo",70,12);
-        ResponseEntity<City> item = this.restTemplate.postForEntity(apiPath+"/add",body, City.class);
+    public void getById_failure() throws JSONException {
+        ResponseEntity<APIResponse> res = this.restTemplate.getForEntity(baseUrl+"/id/600",APIResponse.class);
 
-        assertTrue(item.getStatusCode().is2xxSuccessful());
-        assertEquals("Cairo",item.getBody().getName());
+        assertTrue(res.getStatusCodeValue()==404);
+        assertFalse(res.getBody().isStatus());
+        assertEquals("City can't be found by id 600",res.getBody().getMessage());
 
     }
 
     @Test
-    public void postCity_404() throws JSONException {
-        City body = new City(101,"Kigali",70,12);
-        ResponseEntity<APIResponse> response = this.restTemplate.postForEntity(apiPath+"/add",body,APIResponse.class);
+    public void addCity_success() throws JSONException {
+        City requestBody = new City(105,"Cairo",70,12);
+        ResponseEntity<City> myCity = this.restTemplate.postForEntity(baseUrl+"/add",requestBody, City.class);
 
-        assertTrue(response.getStatusCodeValue()==400);
-        assertFalse(response.getBody().isStatus());
-        assertEquals("City name Kigali is registered already",response.getBody().getMessage());
+        assertTrue(myCity.getStatusCode().is2xxSuccessful());
+        assertEquals("Cairo",myCity.getBody().getName());
+
+    }
+
+    @Test
+    public void addCity_failure() throws JSONException {
+        City requestBody = new City(101,"Kigali",70,12);
+        ResponseEntity<APIResponse> res = this.restTemplate.postForEntity(baseUrl+"/add",requestBody,APIResponse.class);
+
+        assertTrue(res.getStatusCodeValue()==400);
+        assertFalse(res.getBody().isStatus());
+        assertEquals("City name Kigali is there already",res.getBody().getMessage());
 
     }
 
