@@ -43,7 +43,7 @@ public class CityServiceTest {
     }
 
     @Test
-    public void getById_fail() {
+    public void getById_failure() {
         Long id = 1000L;
         when(cityRepositoryMock.findById(id)).thenReturn(Optional.empty());
         City city = cityService.getById(id);
@@ -51,7 +51,7 @@ public class CityServiceTest {
     }
 
     @Test
-    public void save_success() {
+    public void add_success() {
         CreateCityDTO dto = new CreateCityDTO();
         dto.setName("Kigali");
         dto.setWeather(24);
